@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ConvexClientProvider } from "@/providers/convex-client-provider";
+import { Toaster } from "@/components/ui/sonner";
+import MoadalProvider from "@/providers/MoadalProvider";
+import { Suspense } from "react";
+import { Loading } from "@/components/ui/auth/loading";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,12 +29,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Suspense fallback={<Loading />}>
+            <ConvexClientProvider>
+              <Toaster />
+              <MoadalProvider />
+              {children}
+            </ConvexClientProvider>
+          </Suspense>
+        </body>
+      </html>
   );
 }
